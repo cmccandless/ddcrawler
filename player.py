@@ -4,8 +4,9 @@ from weapon import Weapon
 MAX_LEVEL = 10
 
 class Player(Fighter):
-    def __init__(self, name):
-        super().__init__(Weapon.preset('sword'), 50, 0, name)
+    def __init__(self, name, print=print):
+        super().__init__(Weapon.preset('sword'), 50, 0, name, ac=8, print=print)
+        self.inventory = [self.weapon]
         self.level = 1
         self.needed = 100
     def addexp(self, xp):
@@ -14,6 +15,6 @@ class Player(Fighter):
             level += 1
             self.xp -= self.needed
             self.needed = int(self.needed * 1.1)
-            print('You leveled up! You are now level {}'.format(self.level))
+            self.print('You leveled up! You are now level {}'.format(self.level))
     def __str__(self):
         return super().__str__() + ' {}/{}XP'.format(self.xp, self.needed)

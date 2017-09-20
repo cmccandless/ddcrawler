@@ -1,23 +1,20 @@
 from player import Player
-from fighter import Fighter
-from getch import getch
 from encounter import Encounter
+from getch import getch
 
-def inputch(prompt):
-    print(prompt, end='', flush=True)
-    ch = getch()
-    print('')
-    return ch
-
-def run():
-    player = Player(input('Name: '))
-    result = True
-    while result:
-        encounter = Encounter(player.level)
-        result = encounter.run(player, inputch)
-    print('GAME OVER!')
-    print(str(player))
+class Game:
+    def __init__(self, getch=getch, print=print):
+        self.player = Player(input('Name: '), print=print)
+        self.getch = getch
+        self.print = print
+    def play(self):
+        result = True
+        while result:
+            encounter = Encounter(self.player, getch=self.getch, print=self.print)
+            result = encounter.run()
+            self.print('')
+        self.print(str(self.player))
         
 	
 if __name__ == '__main__':
-    run()
+    Game().play()

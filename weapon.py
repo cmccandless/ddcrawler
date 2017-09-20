@@ -1,11 +1,12 @@
 import dice
+from item import Item
 from itertools import groupby
 
-class Weapon:
+class Weapon(Item):
     presets = ['sword', 'axe']
     def __init__(self, attackDice, name='weapon'):
+        super().__init__(name)
         self.attackDice = list(sorted(attackDice))
-        self.name = name
         
     def damage(self):
         return sum(d.roll() for d in self.attackDice)
@@ -19,5 +20,5 @@ class Weapon:
             raise ValueError('unknown preset "{}"'.format(name))
     def __str__(self):
         groupedDice = groupby(self.attackDice, lambda d: d.sides)
-        dmgStr = ' + '.join('D{}'.format(k) for k, g in groupedDice)
+        dmgStr = ' + '.join('{}D{}'.format(len(list(g)), k) for k, g in groupedDice)
         return '{} {}'.format(self.name, dmgStr)
