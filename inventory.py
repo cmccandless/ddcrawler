@@ -19,10 +19,7 @@ class Inventory:
         consumables = sorted(filter(lambda i: i.consumable, self.items), key=lambda i: i.name)
         consumables = dict((k, list(g)) for k, g in groupby(consumables, key=lambda i: i.name))
         if handler is not None:
-            items = handler(consumables)
-            for item in items:
-                self.remove(item)
-            return items
+            return handler(consumables)
         return []
     def __str__(self):
         return '\n'.join(str(i) for i in self.items)

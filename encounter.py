@@ -9,14 +9,14 @@ def printBanner(bannerText, print=print):
     print(''.rjust(48, '-'))
 
 
-def selectFromList(choices, prompt='', getch=getch, print=print, formatter=lambda x: x or 'Cancel'):
+def selectFromList(choices, prompt='>', getch=getch, print=print, formatter=lambda x: x or 'Cancel'):
     def smartGetch():
         choice = getch(end='').decode()
         try:
             return int(choice)
         except ValueError:
             return choice
-    print('\n'.join(sorted('{} - {}'.format(k, v or 'Cancel') for k, v in choices.items())))
+    print('\n'.join(sorted('{} - {}'.format(k, 'Cancel' if v is None else formatter(v)) for k, v in choices.items())))
     print(prompt, end='', flush=True)
     choice = None
     while choice not in choices:
@@ -89,13 +89,24 @@ class Battle(Encounter):
             if len(consumables) == 0:
                 print('No usable items.')
                 return []
-            items = list(enumerate(consumables.items()))
-            for i, entry in items:
-                name, items = entry
+            # items = list(enumerate(consumables.items()))
+            # for i, entry in items:
+                # name, items = entry
+                # quantityStr = '' if len(items) == 1 else '[x{}]'.format(len(items))
+                # print('{}. {}{}'.format(i + 1, name, quantityStr))
+            choices = dict((i + 1, ch) for i, ch in enumerate(consumables.keys()))
+            choices['b'] = None
+            def formatter(choice):
+                items = consumables[choice]
                 quantityStr = '' if len(items) == 1 else '[x{}]'.format(len(items))
-                print('{}. {}{}'.format(i + 1, name, quantityStr))
-            return []
+                return '{}{}'.format(choice, quantityStr)
+            choice = selectFromList(choices, getch=getch, print=print)
+            if choice is None:
+                return False
+            return [consumables[choice][0]]
         items = self.player.inventory.use(handler)
+        for item in items:
+            item.use(self.player)
         return len(items) > 0
     def run(self):
         printBanner('FIGHT!')
