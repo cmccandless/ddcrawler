@@ -4,8 +4,10 @@ from itertools import groupby
 
 class Weapon(Item):
     presets = ['sword', 'axe']
-    def __init__(self, attackDice, name='weapon'):
+    def __init__(self, attackDice=None, name='unarmed'):
         super().__init__(name)
+        if attackDice is None:
+            attackDice = [dice.D4()]
         self.attackDice = list(sorted(attackDice))
         
     def damage(self):
