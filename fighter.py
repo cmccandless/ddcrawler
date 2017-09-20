@@ -15,7 +15,7 @@ class Fighter:
         print('{} did {} damage to {}'.format(self.name, dmg, other.name))
         other.health -= dmg
     def __str__(self):
-        return '{name} ({xp}XP)'.format(**self.__dict__)
+        return '{name} {health}/{maxhealth}HP [{weapon}]'.format(**self.__dict__)
     @staticmethod
     def preset(name):
         if name == 'orc':

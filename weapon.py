@@ -1,9 +1,10 @@
 import dice
+from itertools import groupby
 
 class Weapon:
     presets = ['sword', 'axe']
     def __init__(self, attackDice, name='weapon'):
-        self.attackDice = attackDice
+        self.attackDice = list(sorted(attackDice))
         self.name = name
         
     def damage(self):
@@ -16,3 +17,7 @@ class Weapon:
             return Weapon([dice.D10()], 'axe')
         else:
             raise ValueError('unknown preset "{}"'.format(name))
+    def __str__(self):
+        groupedDice = groupby(self.attackDice, lambda d: d.sides)
+        dmgStr = ' + '.join('D{}'.format(k) for k, g in groupedDice)
+        return '{} {}'.format(self.name, dmgStr)

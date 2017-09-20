@@ -6,6 +6,10 @@ class Dice:
         self.sides = sides
     def roll(self):
         return randint(1,self.sides)
+    def __str__(self):
+        return 'D{}'.format(self.sides)
+    def __lt__(self, other):
+        return self.sides < other.sides
         
 class D20(Dice):
     def __init__(self):

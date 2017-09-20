@@ -17,7 +17,8 @@ class Encounter:
                         self.fighters.append(Fighter.preset(fighterClass))
     def __str__(self):
         return '\n'.join('{}. {}'.format(i+1,f) for i,f in enumerate(self.fighters))
-    def run(self, player):
+    def run(self, player, input=input):
+        print('NEW ENCOUNTER!')
         while not player.isdead() and any(not f.isdead() for f in self.fighters):
             print(player)
             print(str(self))
@@ -33,4 +34,5 @@ class Encounter:
                 fighter.attack(player)
                 if player.isdead():
                     break
+            print('')
         return not player.isdead()
