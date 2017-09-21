@@ -2,22 +2,7 @@ from random import randint, random, shuffle
 from fighter import Fighter
 from getch import getch
 from console import console
-
-def printBanner(bannerText):
-    mid = int(len(bannerText) / 2)
-    console.print(''.rjust(48, '-'))
-    console.print(bannerText[:mid].rjust(24, '-') + bannerText[mid:].ljust(24, '-'))
-    console.print(''.rjust(48, '-'))
-
-
-def selectFromList(choices, prompt='>', formatter=lambda x: x or 'Cancel'):
-    console.print('\n'.join(sorted('{} - {}'.format(k, 'Cancel' if v is None else formatter(v)) for k, v in choices.items())))
-    console.print(prompt, end='', flush=True)
-    choice = None
-    while choice not in choices:
-        choice = console.smart_getch()
-    console.print(choice)
-    return choices[choice]
+from event import *
     
     
 class Encounter:
@@ -57,7 +42,7 @@ class Battle(Encounter):
                     for _ in range(0, player.level - len(self.fighters)):
                         self.fighters.append(Fighter.preset(fighterClass))
     def __str__(self):
-        return '\n'.join('{}. {}'.format(i+1,f) for i,f in enumerate(self.fighters))
+        return '\n'.join('{}. {}'.format(i+1,f.stats()) for i,f in enumerate(self.fighters))
     def attack(self):
         choices = dict((i+1,f) for i, f in enumerate(self.fighters))
         if len(choices) > 1:
@@ -69,10 +54,12 @@ class Battle(Encounter):
             target = self.fighters[0]
         self.player.attack(target)
         if target.isdead():
-            console.print('{} is dead!'.format(target.name))
+            eventhandler(DeathEvent(target.name))
             self.player.addexp(target.xp)
             self.player.gold += target.gold
-            console.print('{} earned {}XP and {}G!'.format(self.player.name, target.xp, target.gold))
+            # console.print('{} earned {}XP and {}G!'.format(self.player.name, target.xp, target.gold))
+            eventhandler(XPEarnedEvent(self.player, target.xp))
+            eventhandler(GoldObtainedEvent(self.player, target.gold))
             self.fighters.remove(target)
         return True
     def useitem(self):
@@ -105,10 +92,10 @@ class Battle(Encounter):
             break
         return True
     def run(self):
-        console.printBanner('FIGHT!')
+        eventhandler(BattleEvent(self))
         result = True
         while result and not self.player.isdead() and any(not f.isdead() for f in self.fighters):
-            console.print(self.player)
+            console.print(self.player.stats())
             console.print(str(self))
             while True:
                 choices = {
@@ -138,12 +125,14 @@ class Battle(Encounter):
                 if self.player.isdead():
                     break
             console.print('')
-        result = result and not self.player.isdead()
+        if self.player.isdead():
+            eventhandler(DeathEvent(self.player))
+            result = False
         if result:
-            printBanner('Victory!')
+            eventhandler(VictoryEvent(self))
             #handle reward
         else:
-            printBanner('GAME OVER-')
+            eventhandler(GameOverEvent(self))
         return result
 
 
@@ -160,5 +149,7 @@ class Shop(Encounter):
     def buy(self, player, item):
         pass
     def run(self):
-        console.print('Shops coming soon!!!')
+        eventhandler(ShopEvent(self))
+        eventhandler(InfoEvent('Shops coming soon!!!'))
+        eventhandler(ShopClosedEvent(self))
         return True

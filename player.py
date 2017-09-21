@@ -2,6 +2,7 @@ from fighter import Fighter
 from inventory import Inventory
 from weapon import Weapon
 from console import console
+from event import *
 
 MAX_LEVEL = 10
 
@@ -17,9 +18,9 @@ class Player(Fighter):
             level += 1
             self.xp -= self.needed
             self.needed = int(self.needed * 1.1)
-            console.print('You leveled up! You are now level {}'.format(self.level))
-    def __str__(self, verbose=False):
-        s = super().__str__() + ' {}/{}XP'.format(self.xp, self.needed)
+            eventhandler(LevelUpEvent(self, self.level))
+    def stats(self, verbose=False):
+        s = super().stats() + ' {}/{}XP'.format(self.xp, self.needed)
         if verbose:
             s += ' {}G\n{}'.format(self.gold, self.inventory)
         return s

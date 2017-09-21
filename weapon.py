@@ -9,9 +9,14 @@ class Weapon(Item):
         if attackDice is None:
             attackDice = [dice.D4()]
         self.attackDice = list(sorted(attackDice))
-        
     def damage(self):
         return sum(d.roll() for d in self.attackDice)
+    def crit_damage(self):
+        return self.damage() + self.damage()
+    def min_damage(self):
+        return len(self.attackDice)
+    def max_damage(self):
+        return sum(d.sides for d in self.attackDice)
     @staticmethod
     def preset(name):
         if name == 'sword':
@@ -22,5 +27,6 @@ class Weapon(Item):
             raise ValueError('unknown preset "{}"'.format(name))
     def __str__(self):
         groupedDice = groupby(self.attackDice, lambda d: d.sides)
-        dmgStr = ' + '.join('{}D{}'.format(len(list(g)), k) for k, g in groupedDice)
-        return '{} {}'.format(self.name, dmgStr)
+        # dmgStr = ' + '.join('{}D{}'.format(len(list(g)), k) for k, g in groupedDice)
+        dmgStr = '{}-{}'.format(self.min_damage(), self.max_damage())
+        return '{}({})'.format(self.name, dmgStr)

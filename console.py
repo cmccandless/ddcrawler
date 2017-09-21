@@ -2,11 +2,10 @@ from getch import getch
 from math import floor, ceil
 
 class Console:
-    def __init__(self, getch=getch, print=print, input=input, data_handler=None):
+    def __init__(self, getch=getch, print=print, input=input):
         self.__getch__ = getch
         self.__print__ = print
         self.__input__ = input
-        self.data_handler = data_handler
         self.menu_formatter = self.default_menu_formatter
     def print(self, *objects, sep=' ', end='\n', flush=True):
         self.__print__(*objects, sep=sep, end=end, flush=flush)
@@ -29,12 +28,16 @@ class Console:
             except ValueError:
                 pass
         return choice
-    def printBanner(self, bannerText, width=48):
+    def createBanner(self, bannerText, width=48):
         mid = int(len(bannerText) / 2)
-        self.print(''.rjust(width, '-'))
-        self.print(bannerText[:mid].rjust(int(floor(width / 2)), '-'), end='')
-        self.print(bannerText[mid:].ljust(int(ceil(width / 2)), '-'))
-        self.print(''.rjust(width, '-'), flush=True)
+        return '\n'.join([
+            ''.rjust(width, '-'),
+            (bannerText[:mid].rjust(int(floor(width / 2)), '-') +
+             bannerText[mid:].ljust(int(ceil(width / 2)), '-')),
+            ''.rjust(width, '-')
+        ])
+    def printBanner(self, bannerText, width=48):
+        self.print(self.createBanner(bannerText, width))
     def default_menu_formatter(self, choice):
         return 'Cancel' if choice is None else str(choice)
     def menu(self, choices, title=None, prompt='>', formatter=None, echo=True):

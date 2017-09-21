@@ -2,6 +2,7 @@ from dice import D20
 from weapon import Weapon
 from armor import Armor
 from console import console
+from event import *
 
 class Fighter:
     presets = ['orc', 'thief']
@@ -19,15 +20,20 @@ class Fighter:
     def ac(self):
         return self.baseac + self.armor.ac
     def attack(self, other):
-        hit = D20().roll() > other.ac()
-        if hit:
-            dmg = self.weapon.damage()
-            console.print('{} did {} damage to {}'.format(self.name, dmg, other.name))
-            other.health -= dmg
+        roll = D20().roll()
+        critical = roll == 20
+        if critical:
+            hit = True
         else:
-            console.print('{} missed!'.format(self.name))
+            hit = roll > other.ac()
+        dmg = self.weapon.crit_damage() if critical else self.weapon.damage()
+        if hit:
+            other.health -= max(0, dmg)
+        eventhandler(AttackEvent(self, other, hit, dmg, critical))
+    def stats(self):
+        return '{name} [{weapon}] {health}/{maxhealth}HP'.format(**self.__dict__)
     def __str__(self):
-        return '{name} {health}/{maxhealth}HP [{weapon}]'.format(**self.__dict__)
+        return self.name
     @staticmethod
     def preset(name):
         if name == 'orc':

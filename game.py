@@ -15,7 +15,7 @@ class Game:
             encounter = Encounter.random(self.player)
             result = encounter.run()
             console.print('')
-        console.print(str(self.player))
+        console.print(self.player.stats(True))
         
 	
 if __name__ == '__main__':
