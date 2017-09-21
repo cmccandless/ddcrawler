@@ -1,6 +1,5 @@
 from dice import *
 from item import Item
-from itertools import groupby
 
 with open('weapon.json', 'r') as f:
     from json import load
@@ -31,8 +30,6 @@ class Weapon(Item):
         else:
             raise ValueError('unknown preset "{}"'.format(name))
     def __str__(self):
-        # groupedDice = groupby(self.damageDice, lambda d: d.sides)
-        # dmgStr = ' + '.join('{}D{}'.format(len(list(g)), k) for k, g in groupedDice)
         dmgStr = '{}-{}'.format(self.min_damage(), self.max_damage())
         return '{}({})'.format(self.name, dmgStr)
         

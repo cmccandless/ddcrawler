@@ -54,6 +54,23 @@ class AttackEvent(Event):
             base += '{} missed!'.format(self.attacker)
         return base
         
+class ItemUsedEvent(Event):
+    def __init__(self, user, target, item, quantity=1, type='item used'):
+        super().__init__(type)
+        self.user = user
+        self.target = target
+        self.item = item
+        self.quantity = quantity
+    def __str__(self):
+        fmt = '{} used {} {}{} on {}.'
+        target = 'themselves' if self.user == self.target else self.target
+        return fmt.format(self.user,
+                          self.quantity,
+                          self.item.name,
+                          's' if self.quantity > 1 else '',
+                          target)
+
+        
 class DamageEvent(StatusEvent):
     def __init__(self, fighter, damage, type='damage'):
         super().__init__(fighter, type)

@@ -8,7 +8,7 @@ MAX_LEVEL = 10
 
 class Player(Fighter):
     def __init__(self, name):
-        super().__init__(Weapon.preset('Sword'), health=50, name=name, ac=8)
+        super().__init__(Weapon.preset('Rusty Sword'), health=50, name=name, ac=8)
         self.inventory = Inventory([self.__weapon__])
         self.needed = 100
     def addexp(self, xp):
@@ -21,7 +21,7 @@ class Player(Fighter):
     def stats(self, verbose=False):
         s = super().stats() + ' {}/{}XP'.format(self.xp, self.needed)
         if verbose:
-            s += ' {}G\n{}'.format(self.gold, self.inventory)
+            s += ' {}G\nInventory:\n{}'.format(self.gold, self.inventory)
         return s
     def select_spell(self):
         choices = dict((i + 1, s) for i, s in enumerate(self.spells.keys()))

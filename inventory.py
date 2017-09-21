@@ -5,6 +5,11 @@ from itertools import groupby
 class Inventory:
     def __init__(self, items=[]):
         self.items = items
+        self.current = 0
+    def __len__(self):
+        return len(self.items)
+    def __iter__(self):
+        return self.items.__iter__()
     def add(self, item):
         if not isinstance(item, Item):
             raise ValueError('not an item')

@@ -47,7 +47,7 @@ class Battle(Encounter):
         choices = dict((i+1,f) for i, f in enumerate(self.fighters))
         if len(choices) == 1:
             return self.fighters[0]
-        choices['b'] = None
+        choices['q'] = None
         return Console.inst.menu(choices, 'Choose a target:')
     def attack(self):
         while True:
@@ -65,13 +65,6 @@ class Battle(Encounter):
                 continue
             for target in targets:
                 self.player.attack(target, spell_name)
-                if target.isdead():
-                    eventhandler(DeathEvent(target.name))
-                    self.player.addexp(target.xp)
-                    self.player.gold += target.gold
-                    eventhandler(XPEarnedEvent(self.player, target.xp))
-                    eventhandler(GoldObtainedEvent(self.player, target.gold))
-                    self.fighters.remove(target)
                 return True
     def useitem(self):
         def handler(consumeables):
@@ -79,7 +72,7 @@ class Battle(Encounter):
                 eventhandler(InfoEvent('No usable items.'))
                 return []
             choices = dict((i + 1, ch) for i, ch in enumerate(consumeables.keys()))
-            choices['b'] = None
+            choices['q'] = None
             def formatter(choice):
                 items = consumeables[choice]
                 quantityStr = '' if len(items) == 1 else '[x{}]'.format(len(items))
@@ -98,6 +91,7 @@ class Battle(Encounter):
             choices = dict((i + 1, t) for i, t in enumerate(targets))
             choices['b'] = None
             choice = Console.inst.menu(choices, 'Use on whom?')
+            eventhandler(ItemUsedEvent(self.player, choice, item))
             if choice is None or not item.use(choice):
                 continue
             break
@@ -131,9 +125,17 @@ class Battle(Encounter):
             if not result:
                 break
             for fighter in self.fighters:
-                fighter.attack(self.player)
-                if self.player.isdead():
-                    break
+                if fighter.isdead():
+                    eventhandler(DeathEvent(fighter.name))
+                    self.player.addexp(fighter.xp)
+                    self.player.gold += fighter.gold
+                    eventhandler(XPEarnedEvent(self.player, fighter.xp))
+                    eventhandler(GoldObtainedEvent(self.player, fighter.gold))
+                    self.fighters.remove(fighter)
+                else:
+                    fighter.attack(self.player)
+                    if self.player.isdead():
+                        break
             Console.inst.print('')
         if self.player.isdead():
             eventhandler(DeathEvent(self.player))

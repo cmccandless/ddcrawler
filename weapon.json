@@ -3,6 +3,10 @@
 		"damageDice": "[D4, D4]",
 		"value": 10
 	},
+	"Rusty Sword": {
+		"damageDice": "[D4, D4]",
+		"value": 0
+	},
 	"Axe": {
 		"damageDice": "[D10]",
 		"value": 12

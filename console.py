@@ -19,7 +19,10 @@ class Console:
         if choices is not None and None in choices:
             raise ValueError('None is not a valid choice.')
         while choice is None or (choices is not None and choice not in choices):
-            choice = self.getch(end='').decode()
+            try:
+                choice = self.getch(end='').decode()
+            except UnicodeDecodeError:
+                continue
             try:
                 f_choice = float(choice)
                 try:

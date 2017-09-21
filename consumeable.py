@@ -1,15 +1,19 @@
 from item import Item
 from event import *
+from fighter import Fighter
 
 with open('consumeable.json', 'r') as f:
     from json import load
     presets = load(f)
 
 class Consumeable(Item):
-    def __init__(self, name='consumeable', value=0, effect=None):
+    def __init__(self, name='consumeable', value=0, effect=None, scope=None):
         super().__init__(name, value, True)
         self.effect = effect
+        self.scope = scope
     def use(self, target):
+        if target is None:
+            raise ValueError('target cannot be None!')
         if self.effect is not None:
             self.effect(target)
     @staticmethod
@@ -30,7 +34,7 @@ class Consumeable(Item):
             
 class HealthPotion(Consumeable):
     def __init__(self, name='health potion', value=7, factor=25):
-        super().__init__(name, value)
+        super().__init__(name, value, Fighter)
         self.factor = factor
     def use(self, fighter):
         if fighter is None:
@@ -41,4 +45,15 @@ class HealthPotion(Consumeable):
             return False
         fighter.health += healed
         eventhandler(HealEvent(fighter, healed))
+        return True
+        
+class Bomb(Consumeable):
+    def __init__(self, name='bomb', value=20, damage=10):
+        super().__init__(name, value, Fighter)
+        self.damage = damage
+    def use(self, target):
+        if target is None:
+            raise ValueError('target cannot be None!')
+        target.health -= self.damage
+        eventhandler(DamageEvent(target, self.damage))
         return True
