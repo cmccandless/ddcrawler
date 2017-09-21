@@ -11,22 +11,28 @@ class Dice:
     def __lt__(self, other):
         return self.sides < other.sides
         
-class D20(Dice):
-    def __init__(self):
-        super().__init__(20)
+# class D20(Dice):
+    # def __init__(self):
+        # super().__init__(20)
         
-class D10(Dice):
-    def __init__(self):
-        super().__init__(10)
+# class D10(Dice):
+    # def __init__(self):
+        # super().__init__(10)
         
-class D8(Dice):
-    def __init__(self):
-        super().__init__(8)
+# class D8(Dice):
+    # def __init__(self):
+        # super().__init__(8)
         
-class D6(Dice):
-    def __init__(self):
-        super().__init__(6)
+# class D6(Dice):
+    # def __init__(self):
+        # super().__init__(6)
         
-class D4(Dice):
-    def __init__(self):
-        super().__init__(4)
+# class D4(Dice):
+    # def __init__(self):
+        # super().__init__(4)
+        
+D20 = Dice(20)
+D10 = Dice(10)
+D8 = Dice(8)
+D6 = Dice(6)
+D4 = Dice(4)

@@ -67,7 +67,7 @@ class DeathEvent(StatusEvent):
     def __str__(self):
         return '{} died!'.format(self.fighter)
         
-class HealEvent(Event):
+class HealEvent(StatusEvent):
     def __init__(self, fighter, hp, type='heal'):
         super().__init__(fighter, type)
         self.hp = hp

@@ -1,5 +1,5 @@
 from random import randint, random, shuffle
-from fighter import Fighter
+import fighter
 from getch import getch
 from console import Console
 from event import *
@@ -34,13 +34,13 @@ class Battle(Encounter):
         if fighters is None:
             self.fighters = []
             while len(self.fighters) == 0:
-                fighterClasses = list(Fighter.presets)
+                fighterClasses = list(fighter.presets.keys())
                 shuffle(fighterClasses)
                 for fighterClass in fighterClasses:
                     if len(self.fighters) == player.level:
                         break
                     for _ in range(0, player.level - len(self.fighters)):
-                        self.fighters.append(Fighter.preset(fighterClass))
+                        self.fighters.append(fighter.Fighter.preset(fighterClass))
     def __str__(self):
         return '\n'.join('{}. {}'.format(i+1,f.stats()) for i,f in enumerate(self.fighters))
     def select_target(self):
@@ -74,20 +74,20 @@ class Battle(Encounter):
                     self.fighters.remove(target)
                 return True
     def useitem(self):
-        def handler(consumables):
-            if len(consumables) == 0:
+        def handler(consumeables):
+            if len(consumeables) == 0:
                 eventhandler(InfoEvent('No usable items.'))
                 return []
-            choices = dict((i + 1, ch) for i, ch in enumerate(consumables.keys()))
+            choices = dict((i + 1, ch) for i, ch in enumerate(consumeables.keys()))
             choices['b'] = None
             def formatter(choice):
-                items = consumables[choice]
+                items = consumeables[choice]
                 quantityStr = '' if len(items) == 1 else '[x{}]'.format(len(items))
                 return '{}{}'.format(choice, quantityStr)
             choice = Console.inst.menu(choices, formatter=formatter)
             if choice is None:
                 return []
-            return [consumables[choice][0]]
+            return [consumeables[choice][0]]
         while True:
             items = self.player.inventory.use(handler)
             if len(items) == 0:
@@ -98,7 +98,7 @@ class Battle(Encounter):
             choices = dict((i + 1, t) for i, t in enumerate(targets))
             choices['b'] = None
             choice = Console.inst.menu(choices, 'Use on whom?')
-            if item is None or not item.use(choice):
+            if choice is None or not item.use(choice):
                 continue
             break
         return True

@@ -4,18 +4,22 @@ from armor import Armor, no_armor
 from spell import MeleeBasic
 from event import *
 
+with open('fighter.json', 'r') as f:
+    from json import load
+    presets = load(f)
+
 class Fighter:
-    presets = ['orc', 'thief']
-    def __init__(self, weapon=None, health=5, xp=0, name='fighter', armor=None, ac=6, gold=0):
+    def __init__(self, weapon=None, health=5, xp=0, level=1, name='fighter', armor=None, ac=6, gold=0):
         self.__weapon__ = weapon
         self.__armor__ = armor
         self.baseac = ac
         self.maxhealth = health
         self.health = health
         self.xp = xp
+        self.level = level
         self.gold = gold
         self.name = name
-        self.spells = {'attack':MeleeBasic(self)}
+        self.spells = {'Attack':MeleeBasic(self)}
     def weapon(self):
         return self.__weapon__ or unarmed
     def armor(self):
@@ -24,8 +28,8 @@ class Fighter:
         return self.health <= 0
     def ac(self):
         return self.baseac + self.armor().ac
-    def attack(self, target, spell_name='attack'):
-        roll = D20().roll()
+    def attack(self, target, spell_name='Attack'):
+        roll = D20.roll()
         critical = roll == 20
         if critical:
             hit = True
@@ -39,13 +43,17 @@ class Fighter:
     def stats(self):
         return '{name} [{{}}] {health}/{maxhealth}HP'.format(**self.__dict__).format(self.weapon())
     def __str__(self):
-        return self.name
+        return '{} Lv{}'.format(self.name, self.level)
     @staticmethod
     def preset(name):
-        if name == 'orc':
-            return Fighter(Weapon.preset('axe'), 12, 15, 'orc', gold=5)
-        elif name == 'thief':
-            return Fighter(Weapon.preset('sword'), 9, 10, 'thief', gold=5)
+        if name in presets:
+            data = {'name': name}
+            for k, v in presets[name].items():
+                if k == 'weapon':
+                    data[k] = Weapon.preset(v)
+                else:
+                    data[k] = v
+            return Fighter(**data)
         else:
             raise ValueError('unknown preset "{}"'.format(name))
             

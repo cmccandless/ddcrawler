@@ -47,7 +47,7 @@ class Console:
         if title is not None:
             self.print(title)
         s_choices = ['[{}] {}'.format(k,
-                                      'Cancel' if v is None else formatter(v))
+                                      '[Cancel]' if v is None else formatter(v))
                      for k, v in choices.items()]
         self.print('\n'.join(sorted(s_choices)))
         if echo:

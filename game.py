@@ -5,12 +5,17 @@ from console import Console
 from event import *
 
 class Game:
-    def __init__(self, console_instance=Console.inst):
-        Console.inst = console_instance
+    def __init__(self):
         self.player = Player(Console.inst.input('Name: '))
-        from consumable import HealthPotion
+        
+        from consumeable import Consumeable
         for _ in range(3):
-            self.player.inventory.add(HealthPotion())
+            self.player.inventory.add(Consumeable.preset('Minor Health Potion'))
+        from spell import Spell
+        self.player.spells['Fireball'] = Spell.preset(self, 'Fireball')
+    def enable_console(enable=True):
+        eventhandler.enable_console = enable
+        
     def play(self):
         result = True
         while result:

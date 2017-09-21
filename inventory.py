@@ -24,9 +24,8 @@ class Inventory:
             return handler(items)
         return []
     def use(self, handler=None):
-        return self.select(handler, lambda i: i.consumable)
+        return self.select(handler, lambda i: i.consumeable)
     def __str__(self):
-        # return '\n'.join(str(i) for i in self.items)
         grp = self.grouped()
         grp_s = ['{}x{}'.format(k, len(g)) for k, g in grp.items()]
         return '\n'.join(sorted(grp_s))
