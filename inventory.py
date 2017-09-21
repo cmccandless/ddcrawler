@@ -15,13 +15,18 @@ class Inventory:
         elif item not in self.items:
             raise ValueError('cannot remove item: item not in inventory')
         self.items.remove(item)
-    def select(self, handler=None, key=lambda i: True):
+    def grouped(self, key=lambda i: True):
         items = sorted(filter(key, self.items), key=lambda i: i.name)
-        items = dict((k, list(g)) for k, g in groupby(items, key=lambda i: i.name))
+        return dict((k, list(g)) for k, g in groupby(items, key=lambda i: i.name))
+    def select(self, handler=None, key=lambda i: True):
+        items = self.grouped(key)
         if handler is not None:
             return handler(items)
         return []
     def use(self, handler=None):
         return self.select(handler, lambda i: i.consumable)
     def __str__(self):
-        return '\n'.join(str(i) for i in self.items)
+        # return '\n'.join(str(i) for i in self.items)
+        grp = self.grouped()
+        grp_s = ['{}x{}'.format(k, len(g)) for k, g in grp.items()]
+        return '\n'.join(sorted(grp_s))

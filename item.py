@@ -3,3 +3,5 @@ class Item:
         self.name = name
         self.value = value
         self.consumable = consumable
+    def __str__(self):
+        return self.name + '(C)' if self.consumable else self.name

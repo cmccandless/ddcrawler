@@ -1,5 +1,4 @@
 from item import Item
-from console import console
 from event import *
 
 class Consumable(Item):
@@ -17,7 +16,7 @@ class HealthPotion(Consumable):
     def use(self, fighter):
         healed = min(self.factor, fighter.maxhealth - fighter.health)
         if healed == 0:
-            console.print('This item cannot be used now!')
+            eventhandler(InfoEvent('This item cannot be used now!'))
             return False
         fighter.health += healed
         eventhandler(HealEvent(fighter, healed))

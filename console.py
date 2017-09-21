@@ -2,6 +2,7 @@ from getch import getch
 from math import floor, ceil
 
 class Console:
+    instance = None
     def __init__(self, getch=getch, print=print, input=input):
         self.__getch__ = getch
         self.__print__ = print
@@ -44,19 +45,18 @@ class Console:
         if formatter is None:
             formatter = self.menu_formatter
         if title is not None:
-            console.print(title)
+            self.print(title)
         s_choices = ['[{}] {}'.format(k,
                                       'Cancel' if v is None else formatter(v))
                      for k, v in choices.items()]
-        console.print('\n'.join(sorted(s_choices)))
+        self.print('\n'.join(sorted(s_choices)))
         if echo:
-            console.print(prompt, end='', flush=True)
+            self.print(prompt, end='', flush=True)
         choice = None
         while choice not in choices:
-            choice = console.smart_getch()
+            choice = self.smart_getch()
         if echo:
-            console.print(choice)
+            self.print(choice)
         return choices[choice]
-
         
-console = Console()
+Console.inst = Console()

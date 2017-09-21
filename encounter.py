@@ -1,7 +1,7 @@
 from random import randint, random, shuffle
 from fighter import Fighter
 from getch import getch
-from console import console
+from console import Console
 from event import *
     
     
@@ -47,7 +47,7 @@ class Battle(Encounter):
         choices = dict((i+1,f) for i, f in enumerate(self.fighters))
         if len(choices) > 1:
             choices['b'] = None
-            target = console.menu(choices)
+            target = Console.inst.menu(choices)
             if target is None:
                 return False
         else:
@@ -57,7 +57,6 @@ class Battle(Encounter):
             eventhandler(DeathEvent(target.name))
             self.player.addexp(target.xp)
             self.player.gold += target.gold
-            # console.print('{} earned {}XP and {}G!'.format(self.player.name, target.xp, target.gold))
             eventhandler(XPEarnedEvent(self.player, target.xp))
             eventhandler(GoldObtainedEvent(self.player, target.gold))
             self.fighters.remove(target)
@@ -65,7 +64,7 @@ class Battle(Encounter):
     def useitem(self):
         def handler(consumables):
             if len(consumables) == 0:
-                console.print('No usable items.')
+                eventhandler(InfoEvent('No usable items.'))
                 return []
             choices = dict((i + 1, ch) for i, ch in enumerate(consumables.keys()))
             choices['b'] = None
@@ -73,7 +72,7 @@ class Battle(Encounter):
                 items = consumables[choice]
                 quantityStr = '' if len(items) == 1 else '[x{}]'.format(len(items))
                 return '{}{}'.format(choice, quantityStr)
-            choice = console.menu(choices, formatter=formatter)
+            choice = Console.inst.menu(choices, formatter=formatter)
             if choice is None:
                 return []
             return [consumables[choice][0]]
@@ -86,7 +85,7 @@ class Battle(Encounter):
             targets.extend(self.fighters)
             choices = dict((i + 1, t) for i, t in enumerate(targets))
             choices['b'] = None
-            choice = console.menu(choices, 'Use on whom?')
+            choice = Console.inst.menu(choices, 'Use on whom?')
             if item is None or not item.use(choice):
                 continue
             break
@@ -95,16 +94,15 @@ class Battle(Encounter):
         eventhandler(BattleEvent(self))
         result = True
         while result and not self.player.isdead() and any(not f.isdead() for f in self.fighters):
-            console.print(self.player.stats())
-            console.print(str(self))
+            eventhandler(InfoEvent(self.player.stats()))
+            eventhandler(InfoEvent(str(self)))
             while True:
                 choices = {
                     'a':'Attack', 
                     'i':'Inventory',
                     'q':'Quit'
                 }
-                console.print('Choose:')
-                choice = console.menu(choices).lower()
+                choice = Console.inst.menu(choices, 'Choose:').lower()
                 if choice.startswith('q'):
                     result = False
                     break
@@ -124,7 +122,7 @@ class Battle(Encounter):
                 fighter.attack(self.player)
                 if self.player.isdead():
                     break
-            console.print('')
+            Console.inst.print('')
         if self.player.isdead():
             eventhandler(DeathEvent(self.player))
             result = False

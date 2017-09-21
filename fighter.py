@@ -1,14 +1,13 @@
 from dice import D20
-from weapon import Weapon
-from armor import Armor
-from console import console
+from weapon import Weapon, unarmed
+from armor import Armor, no_armor
 from event import *
 
 class Fighter:
     presets = ['orc', 'thief']
     def __init__(self, weapon=None, health=5, xp=0, name='fighter', armor=None, ac=6, gold=0):
-        self.weapon = weapon or Weapon()
-        self.armor = armor or Armor()
+        self.weapon = weapon
+        self.armor = armor
         self.baseac = ac
         self.maxhealth = health
         self.health = health
@@ -18,7 +17,7 @@ class Fighter:
     def isdead(self):
         return self.health <= 0
     def ac(self):
-        return self.baseac + self.armor.ac
+        return self.baseac + (self.armor or no_armor).ac
     def attack(self, other):
         roll = D20().roll()
         critical = roll == 20
@@ -26,6 +25,7 @@ class Fighter:
             hit = True
         else:
             hit = roll > other.ac()
+        wep = self.weapon or unarmed
         dmg = self.weapon.crit_damage() if critical else self.weapon.damage()
         if hit:
             other.health -= max(0, dmg)

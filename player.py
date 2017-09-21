@@ -1,7 +1,6 @@
 from fighter import Fighter
 from inventory import Inventory
 from weapon import Weapon
-from console import console
 from event import *
 
 MAX_LEVEL = 10
@@ -9,7 +8,7 @@ MAX_LEVEL = 10
 class Player(Fighter):
     def __init__(self, name):
         super().__init__(Weapon.preset('sword'), 50, 0, name, ac=8)
-        self.inventory = Inventory([self.weapon, self.armor])
+        self.inventory = Inventory([self.weapon])
         self.level = 1
         self.needed = 100
     def addexp(self, xp):

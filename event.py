@@ -1,4 +1,4 @@
-from console import console
+from console import Console
 
 class EventHandler:
     def __init__(self, enable_console=True):
@@ -10,7 +10,7 @@ class EventHandler:
         self.__event_handlers__.remove(handler)
     def __call__(self, ev):
         if self.enable_console:
-            console.print(ev)
+            Console.inst.print(ev)
         for handler in self.__event_handlers__:
             handler(ev)
             
@@ -79,7 +79,7 @@ class EncounterEvent(Event):
         super().__init__(type)
         self.encounter = encounter
     def __str__(self):
-        return console.createBanner(self.type.upper())
+        return Console.inst.createBanner(self.type.upper())
         
 class EncounterStartEvent(EncounterEvent):
     def __init__(self, encounter, type='encounter start'):

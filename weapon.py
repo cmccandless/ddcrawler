@@ -4,15 +4,14 @@ from itertools import groupby
 
 class Weapon(Item):
     presets = ['sword', 'axe']
-    def __init__(self, attackDice=None, name='unarmed'):
+    def __init__(self, attackDice, name='weapon', crit_handler=lambda w: w.damage() + w.damage()):
         super().__init__(name)
-        if attackDice is None:
-            attackDice = [dice.D4()]
         self.attackDice = list(sorted(attackDice))
+        self.crit_handler = crit_handler
     def damage(self):
         return sum(d.roll() for d in self.attackDice)
     def crit_damage(self):
-        return self.damage() + self.damage()
+        return self.crit_handler(self)
     def min_damage(self):
         return len(self.attackDice)
     def max_damage(self):
@@ -30,3 +29,5 @@ class Weapon(Item):
         # dmgStr = ' + '.join('{}D{}'.format(len(list(g)), k) for k, g in groupedDice)
         dmgStr = '{}-{}'.format(self.min_damage(), self.max_damage())
         return '{}({})'.format(self.name, dmgStr)
+        
+unarmed = Weapon([dice.D4()], 'unarmed')
