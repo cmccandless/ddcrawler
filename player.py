@@ -5,12 +5,13 @@ from spell import Spell
 from event import *
 
 MAX_LEVEL = 10
+BASE_XP_NEEDED = 25
 
 class Player(Fighter):
     def __init__(self, name):
         super().__init__(Weapon.preset('Rusty Sword'), health=50, name=name, ac=8)
         self.inventory = Inventory([self.__weapon__])
-        self.needed = 100
+        self.needed = BASE_XP_NEEDED
     def addexp(self, xp):
         self.xp += xp
         while self.level < MAX_LEVEL and self.xp >= self.needed:
