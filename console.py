@@ -21,12 +21,13 @@ class Console:
         while choice is None or (choices is not None and choice not in choices):
             choice = self.getch(end='').decode()
             try:
-                choice = float(choice)
-            except ValueError:
+                f_choice = float(choice)
                 try:
                     choice = int(choice)
                 except ValueError:
-                    pass
+                    choice = f_choice
+            except ValueError:
+                pass
         return choice
     def printBanner(self, bannerText, width=48):
         mid = int(len(bannerText) / 2)

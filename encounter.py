@@ -88,15 +88,22 @@ class Battle(Encounter):
                 return '{}{}'.format(choice, quantityStr)
             choice = console.menu(choices, formatter=formatter)
             if choice is None:
-                return False
+                return []
             return [consumables[choice][0]]
         while True:
             items = self.player.inventory.use(handler)
-            for item in items:
-                if not item.use(self.player):
-                    continue
+            if len(items) == 0:
+                return False
+            item = items[0]
+            targets = [self.player]
+            targets.extend(self.fighters)
+            choices = dict((i + 1, t) for i, t in enumerate(targets))
+            choices['b'] = None
+            choice = console.menu(choices, 'Use on whom?')
+            if item is None or not item.use(choice):
+                continue
             break
-        return len(items) > 0
+        return True
     def run(self):
         console.printBanner('FIGHT!')
         result = True
