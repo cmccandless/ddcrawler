@@ -43,24 +43,36 @@ class Battle(Encounter):
                         self.fighters.append(Fighter.preset(fighterClass))
     def __str__(self):
         return '\n'.join('{}. {}'.format(i+1,f.stats()) for i,f in enumerate(self.fighters))
-    def attack(self):
+    def select_target(self):
         choices = dict((i+1,f) for i, f in enumerate(self.fighters))
-        if len(choices) > 1:
-            choices['b'] = None
-            target = Console.inst.menu(choices)
-            if target is None:
+        if len(choices) == 1:
+            return self.fighters[0]
+        choices['b'] = None
+        return Console.inst.menu(choices, 'Choose a target:')
+    def attack(self):
+        while True:
+            spell_name = self.player.select_spell()
+            if spell_name == None:
                 return False
-        else:
-            target = self.fighters[0]
-        self.player.attack(target)
-        if target.isdead():
-            eventhandler(DeathEvent(target.name))
-            self.player.addexp(target.xp)
-            self.player.gold += target.gold
-            eventhandler(XPEarnedEvent(self.player, target.xp))
-            eventhandler(GoldObtainedEvent(self.player, target.gold))
-            self.fighters.remove(target)
-        return True
+            spell = self.player.spells[spell_name]
+            targets = []
+            for _ in range(spell.ntargets):
+                target = self.select_target()
+                if target == None:
+                    break
+                targets.append(target)
+            if len(targets) < spell.ntargets:
+                continue
+            for target in targets:
+                self.player.attack(target, spell_name)
+                if target.isdead():
+                    eventhandler(DeathEvent(target.name))
+                    self.player.addexp(target.xp)
+                    self.player.gold += target.gold
+                    eventhandler(XPEarnedEvent(self.player, target.xp))
+                    eventhandler(GoldObtainedEvent(self.player, target.gold))
+                    self.fighters.remove(target)
+                return True
     def useitem(self):
         def handler(consumables):
             if len(consumables) == 0:

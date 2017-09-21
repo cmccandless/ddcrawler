@@ -4,18 +4,16 @@ from itertools import groupby
 
 class Weapon(Item):
     presets = ['sword', 'axe']
-    def __init__(self, attackDice, name='weapon', crit_handler=lambda w: w.damage() + w.damage()):
+    def __init__(self, damageDice, name='weapon', crit_handler=lambda w: w.damage() + w.damage()):
         super().__init__(name)
-        self.attackDice = list(sorted(attackDice))
+        self.damageDice = list(sorted(damageDice))
         self.crit_handler = crit_handler
     def damage(self):
-        return sum(d.roll() for d in self.attackDice)
-    def crit_damage(self):
-        return self.crit_handler(self)
+        return sum(d.roll() for d in self.damageDice)
     def min_damage(self):
-        return len(self.attackDice)
+        return len(self.damageDice)
     def max_damage(self):
-        return sum(d.sides for d in self.attackDice)
+        return sum(d.sides for d in self.damageDice)
     @staticmethod
     def preset(name):
         if name == 'sword':
@@ -25,7 +23,7 @@ class Weapon(Item):
         else:
             raise ValueError('unknown preset "{}"'.format(name))
     def __str__(self):
-        groupedDice = groupby(self.attackDice, lambda d: d.sides)
+        # groupedDice = groupby(self.damageDice, lambda d: d.sides)
         # dmgStr = ' + '.join('{}D{}'.format(len(list(g)), k) for k, g in groupedDice)
         dmgStr = '{}-{}'.format(self.min_damage(), self.max_damage())
         return '{}({})'.format(self.name, dmgStr)

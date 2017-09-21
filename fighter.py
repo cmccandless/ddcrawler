@@ -1,37 +1,43 @@
 from dice import D20
 from weapon import Weapon, unarmed
 from armor import Armor, no_armor
+from spell import MeleeBasic
 from event import *
 
 class Fighter:
     presets = ['orc', 'thief']
     def __init__(self, weapon=None, health=5, xp=0, name='fighter', armor=None, ac=6, gold=0):
-        self.weapon = weapon
-        self.armor = armor
+        self.__weapon__ = weapon
+        self.__armor__ = armor
         self.baseac = ac
         self.maxhealth = health
         self.health = health
         self.xp = xp
         self.gold = gold
         self.name = name
+        self.spells = {'attack':MeleeBasic(self)}
+    def weapon(self):
+        return self.__weapon__ or unarmed
+    def armor(self):
+        return self.__armor__ or no_armor
     def isdead(self):
         return self.health <= 0
     def ac(self):
-        return self.baseac + (self.armor or no_armor).ac
-    def attack(self, other):
+        return self.baseac + self.armor().ac
+    def attack(self, target, spell_name='attack'):
         roll = D20().roll()
         critical = roll == 20
         if critical:
             hit = True
         else:
-            hit = roll > other.ac()
-        wep = self.weapon or unarmed
-        dmg = self.weapon.crit_damage() if critical else self.weapon.damage()
+            hit = roll > target.ac()
+        spell = self.spells[spell_name]
+        dmg = spell.crit_damage(target) if critical else spell.damage(target)
         if hit:
-            other.health -= max(0, dmg)
-        eventhandler(AttackEvent(self, other, hit, dmg, critical))
+            target.health -= max(0, dmg)
+        eventhandler(AttackEvent(self, target, hit, dmg, critical))
     def stats(self):
-        return '{name} [{weapon}] {health}/{maxhealth}HP'.format(**self.__dict__)
+        return '{name} [{{}}] {health}/{maxhealth}HP'.format(**self.__dict__).format(self.weapon())
     def __str__(self):
         return self.name
     @staticmethod
