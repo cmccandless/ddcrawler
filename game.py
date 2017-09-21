@@ -1,22 +1,21 @@
 from player import Player
 from encounter import Encounter
 from getch import getch
+from console import console
 
 class Game:
-    def __init__(self, getch=getch, print=print):
-        self.player = Player(input('Name: '), print=print)
+    def __init__(self):
+        self.player = Player(input('Name: '))
         from consumable import HealthPotion
         for _ in range(3):
             self.player.inventory.add(HealthPotion())
-        self.getch = getch
-        self.print = print
     def play(self):
         result = True
         while result:
-            encounter = Encounter.random(self.player, getch, print)
+            encounter = Encounter.random(self.player)
             result = encounter.run()
-            self.print('')
-        self.print(str(self.player))
+            console.print('')
+        console.print(str(self.player))
         
 	
 if __name__ == '__main__':
