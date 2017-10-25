@@ -4,6 +4,7 @@ from random import randint
 class Dice:
     def __init__(self, sides):
         self.sides = sides
+        self.__name__ = 'D{}'.format(sides)
 
     def roll(self):
         return randint(1, self.sides)
