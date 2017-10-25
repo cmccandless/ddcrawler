@@ -11,7 +11,8 @@ BASE_XP_NEEDED = 25
 
 class Player(Fighter):
     def __init__(self, name):
-        super().__init__(Weapon.preset('Rusty Sword'),
+        Fighter.__init__(self,
+                         Weapon.preset('Rusty Sword'),
                          health=50,
                          name=name,
                          ac=8)
@@ -27,7 +28,8 @@ class Player(Fighter):
             eventhandler(LevelUpEvent(self, self.level))
 
     def stats(self, verbose=False):
-        s = super().stats() + ' {}/{}XP'.format(self.xp, self.needed)
+        s = Fighter.stats(self) + ' {}/{}XP'.format(self.xp,
+                                                            self.needed)
         if verbose:
             s += ' {}G\nInventory:\n{}'.format(self.gold, self.inventory)
         return s

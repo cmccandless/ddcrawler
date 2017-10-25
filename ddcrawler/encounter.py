@@ -42,7 +42,7 @@ class Encounter:
 
 class Battle(Encounter):
     def __init__(self, player, fighters=None):
-        super().__init__(player)
+        Encounter.__init__(self, player)
         self.fighters = fighters
         if fighters is None:
             self.fighters = []
@@ -175,7 +175,7 @@ class Battle(Encounter):
 
 class Shop(Encounter):
     def __init__(self, player, gold=100, items=None):
-        super().__init__(player)
+        Encounter.__init__(self, player)
         self.gold = gold
         self.items = items
         if items is None:

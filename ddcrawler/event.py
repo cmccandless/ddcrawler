@@ -33,7 +33,7 @@ class Event:
 
 class InfoEvent(Event):
     def __init__(self, msg, type='info'):
-        super().__init__(type)
+        Event.__init__(self, type)
         self.msg = msg
 
     def __str__(self):
@@ -42,7 +42,7 @@ class InfoEvent(Event):
 
 class StatusEvent(Event):
     def __init__(self, fighter, type='status'):
-        super().__init__(type)
+        Event.__init__(self, type)
         self.fighter = fighter
 
     def __str__(self):
@@ -52,7 +52,7 @@ class StatusEvent(Event):
 class AttackEvent(Event):
     def __init__(self, attacker, victim, hit, damage=0,
                  critical=False, type='attack'):
-        super().__init__(type)
+        Event.__init__(self, type)
         self.attacker = attacker
         self.victim = victim
         self.hit = hit
@@ -72,7 +72,7 @@ class AttackEvent(Event):
 
 class ItemUsedEvent(Event):
     def __init__(self, user, target, item, quantity=1, type='item used'):
-        super().__init__(type)
+        Event.__init__(self, type)
         self.user = user
         self.target = target
         self.item = item
@@ -90,7 +90,7 @@ class ItemUsedEvent(Event):
 
 class DamageEvent(StatusEvent):
     def __init__(self, fighter, damage, type='damage'):
-        super().__init__(fighter, type)
+        StatusEvent.__init__(self, fighter, type)
         self.damage = damage
 
     def __str__(self):
@@ -99,7 +99,7 @@ class DamageEvent(StatusEvent):
 
 class DeathEvent(StatusEvent):
     def __init__(self, fighter, type='death'):
-        super().__init__(fighter, type)
+        StatusEvent.__init__(self, fighter, type)
 
     def __str__(self):
         return '{} died!'.format(self.fighter)
@@ -107,7 +107,7 @@ class DeathEvent(StatusEvent):
 
 class HealEvent(StatusEvent):
     def __init__(self, fighter, hp, type='heal'):
-        super().__init__(fighter, type)
+        StatusEvent.__init__(self, fighter, type)
         self.hp = hp
 
     def __str__(self):
@@ -116,7 +116,7 @@ class HealEvent(StatusEvent):
 
 class EncounterEvent(Event):
     def __init__(self, encounter, type='encounter'):
-        super().__init__(type)
+        Event.__init__(self, type)
         self.encounter = encounter
 
     def __str__(self):
@@ -125,42 +125,42 @@ class EncounterEvent(Event):
 
 class EncounterStartEvent(EncounterEvent):
     def __init__(self, encounter, type='encounter start'):
-        super().__init__(type)
+        EncounterEvent.__init__(self, type)
 
 
 class BattleEvent(EncounterEvent):
     def __init__(self, battle, type='battle'):
-        super().__init__(battle, 'battle')
+        EncounterEvent.__init__(self, battle, 'battle')
 
 
 class ShopEvent(EncounterEvent):
     def __init__(self, shop):
-        super().__init__(shop, 'shop')
+        EncounterEvent.__init__(self, shop, 'shop')
 
 
 class EncounterEndEvent(EncounterEvent):
     def __init__(self, encounter, type='encounter end'):
-        super().__init__(encounter, type)
+        EncounterEvent.__init__(self, encounter, type)
 
 
 class VictoryEvent(EncounterEndEvent):
     def __init__(self, battle, type='victory'):
-        super().__init__(battle, type)
+        EncounterEndEvent.__init__(self, battle, type)
 
 
 class GameOverEvent(EncounterEndEvent):
     def __init__(self, battle, type='game over'):
-        super().__init__(battle, type)
+        EncounterEndEvent.__init__(self, battle, type)
 
 
 class ShopClosedEvent(EncounterEndEvent):
     def __init__(self, shop, type='shop closed'):
-        super().__init__(shop, type)
+        EncounterEndEvent.__init__(self, shop, type)
 
 
 class LevelUpEvent(StatusEvent):
     def __init__(self, fighter, level, type='level up'):
-        super().__init__(fighter, type)
+        StatusEvent.__init__(self, fighter, type)
         self.level = level
 
     def __str__(self):
@@ -170,7 +170,7 @@ class LevelUpEvent(StatusEvent):
 
 class XPEarnedEvent(StatusEvent):
     def __init__(self, fighter, xp, type='xp earned'):
-        super().__init__(fighter, type)
+        StatusEvent.__init__(self, fighter, type)
         self.xp = xp
 
     def __str__(self):
@@ -179,7 +179,7 @@ class XPEarnedEvent(StatusEvent):
 
 class ItemObtainedEvent(StatusEvent):
     def __init__(self, fighter, item, quantity=1, type='item obtained'):
-        super().__init__(fighter, type)
+        StatusEvent.__init__(self, fighter, type)
         self.item = item
         self.quantity = quantity
 
@@ -191,7 +191,7 @@ class ItemObtainedEvent(StatusEvent):
 
 class GoldObtainedEvent(StatusEvent):
     def __init__(self, fighter, gold, type='gold obtained'):
-        super().__init__(fighter, type)
+        StatusEvent.__init__(self, fighter, type)
         self.gold = gold
 
     def __str__(self):

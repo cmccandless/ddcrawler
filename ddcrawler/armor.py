@@ -3,7 +3,7 @@ from item import Item
 
 class Armor(Item):
     def __init__(self, ac=0, name='armor'):
-        super().__init__(name)
+        Item.__init__(self, name)
         self.ac = ac
 
 

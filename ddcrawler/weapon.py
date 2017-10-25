@@ -10,7 +10,7 @@ class Weapon(Item):
 
     def __init__(self, damageDice, value=2, name='weapon',
                  crit_handler=lambda w: w.damage() + w.damage()):
-        super().__init__(name)
+        Item.__init__(self, name)
         self.damageDice = list(sorted(damageDice))
         self.crit_handler = crit_handler
 

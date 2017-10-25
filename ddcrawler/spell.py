@@ -50,7 +50,7 @@ class Spell:
 
 class MeleeBasic(Spell):
     def __init__(self, attacker):
-        super().__init__(attacker, name='Attack')
+        Spell.__init__(self, attacker, name='Attack')
 
     def damage(self, target):
         return self.attacker.weapon().damage()

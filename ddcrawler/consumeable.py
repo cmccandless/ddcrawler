@@ -8,7 +8,7 @@ presets = helper.import_presets(__file__)
 
 class Consumeable(Item):
     def __init__(self, name='consumeable', value=0, effect=None, scope=None):
-        super().__init__(name, value, True)
+        Item.__init__(self, name, value, True)
         self.effect = effect
         self.scope = scope
 
@@ -37,7 +37,7 @@ class Consumeable(Item):
 
 class HealthPotion(Consumeable):
     def __init__(self, name='health potion', value=7, factor=25):
-        super().__init__(name, value, Fighter)
+        Consumeable.__init__(self, name, value, Fighter)
         self.factor = factor
 
     def use(self, fighter):
@@ -54,7 +54,7 @@ class HealthPotion(Consumeable):
 
 class Bomb(Consumeable):
     def __init__(self, name='bomb', value=20, damage=10):
-        super().__init__(name, value, Fighter)
+        Consumeable.__init__(self, name, value, Fighter)
         self.damage = damage
 
     def use(self, target):
