@@ -7,7 +7,7 @@ screen."""
         except ImportError:
             self.impl = _GetchUnix()
 
-    def __call__(self, prompt='', echo=False, end='\n'): 
+    def __call__(self, prompt='', echo=False, end='\n'):
         print(prompt, end='', flush=True)
         ch = self.impl()
         print(ch.decode() if echo else '', end=end, flush=True)
@@ -16,10 +16,14 @@ screen."""
 
 class _GetchUnix:
     def __init__(self):
-        import tty, sys
+        # import tty
+        # import sys
+        pass
 
     def __call__(self):
-        import sys, tty, termios
+        import sys
+        import tty
+        import termios
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
         try:
@@ -32,7 +36,8 @@ class _GetchUnix:
 
 class _GetchWindows:
     def __init__(self):
-        import msvcrt
+        # import msvcrt
+        pass
 
     def __call__(self):
         import msvcrt

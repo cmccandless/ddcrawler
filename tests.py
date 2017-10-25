@@ -1,6 +1,7 @@
 import unittest
 
-import dice
+from dice import (Dice, D4, D6, D8, D10, D12, D20)
+
 
 class DiceTest(unittest.TestCase):
     def test_die(self, die):
@@ -10,13 +11,13 @@ class DiceTest(unittest.TestCase):
             self.assertLessEqual(roll, die.sides)
 
     def test_presets(self):
-        from dice import *
         for die in [D4, D6, D8, D10, D12, D20]:
             self.test_die(die)
 
     def test_arbitrary_die(self):
         die = Dice(7)
-        test_die(die)
+        self.test_die(die)
+
 
 if __name__ == '__main__':
     unittest.main()
