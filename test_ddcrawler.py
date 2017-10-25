@@ -7,7 +7,7 @@ from dice import (Dice, D4, D6, D8, D10, D12, D20)
 
 class AnnotatedList(list):
     def __init__(self, label, *args):
-        super().__init__(args)
+        super(AnnotatedList, self).__init__(args)
         self.__name__ = label
 
 
