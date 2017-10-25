@@ -21,7 +21,7 @@ before_script:
   - flake8 --ignore=E402
 
 script:
-  - ./tests/run_tests.py
-  - coverage run ./tests/run_tests.py
+  - python -m pytest -v
+  - coverage run -m pytest -v
 
 after_success: coveralls
