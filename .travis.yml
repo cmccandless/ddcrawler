@@ -21,6 +21,7 @@ before_script:
   - flake8 --ignore=E402
 
 script:
+  - cd tests
   - python -m pytest -v
   - coverage run -m pytest -v
 
