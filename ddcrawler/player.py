@@ -28,8 +28,7 @@ class Player(Fighter):
             eventhandler(LevelUpEvent(self, self.level))
 
     def stats(self, verbose=False):
-        s = Fighter.stats(self) + ' {}/{}XP'.format(self.xp,
-                                                            self.needed)
+        s = Fighter.stats(self) + ' {}/{}XP'.format(self.xp, self.needed)
         if verbose:
             s += ' {}G\nInventory:\n{}'.format(self.gold, self.inventory)
         return s
