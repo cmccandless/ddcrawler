@@ -1,3 +1,4 @@
+from __future__ import print_function
 from random import random, shuffle
 import fighter
 from console import Console

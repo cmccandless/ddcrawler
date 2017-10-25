@@ -1,3 +1,6 @@
+from __future__ import print_function
+
+
 class _Getch:
     """Gets a single character from standard input.  Does not echo to the
 screen."""
