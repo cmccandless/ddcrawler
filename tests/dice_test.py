@@ -37,6 +37,28 @@ class DiceTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 dice.Dice(sides)
 
+    @unpack
+    @data(AnnotatedList('2 number dice',
+                        [dice.D10, dice.D8],
+                        [1, 0]),
+          AnnotatedList('3 number dice',
+                        [dice.D20, dice.D4, dice.Dice(15)],
+                        [1, 2, 0]),
+          AnnotatedList('2 list dice',
+                        [dice.Dice(['rock', 'paper', 'scissors']),
+                         dice.Dice(['heads', 'tails'])],
+                        [1, 0]),
+          AnnotatedList('Mixed dice',
+                        [dice.Dice(['rock', 'paper', 'scissors']),
+                         dice.Dice([dice.D20, dice.D4]),
+                         dice.D20,
+                         dice.D4],
+                        [3, 2, 0, 1]))
+    def test_dice_are_sortable(self, dice, sort_order):
+        sorted_dice = sorted(dice)
+        result_order = [dice.index(d) for d in sorted_dice]
+        self.assertEqual(result_order, sort_order)
+
 
 if __name__ == '__main__':
     unittest.main()

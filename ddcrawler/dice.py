@@ -29,7 +29,21 @@ class Dice:
         return self.__name__
 
     def __lt__(self, other):
-        return self.sides < other.sides
+        """
+            Sort order: non-Dice, number Dice, list Dice, nested Dice
+        """
+        if isinstance(other, Dice):
+            if isinstance(self.sides, int):
+                if isinstance(other.sides, int):
+                    return self.sides < other.sides
+                return True
+            elif isinstance(self.sides, list):
+                if isinstance(other.sides, list):
+                    return self.sides < other.sides
+        return False
+
+    def __eq__(self, other):
+        return isinstance(other, Dice) and self.sides == other.sides
 
 
 D20 = Dice(20)
