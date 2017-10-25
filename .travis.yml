@@ -21,4 +21,4 @@ before_script:
   - flake8
 
 script:
-  - pytest -v
+  - python -m pytest -v
