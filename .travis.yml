@@ -22,3 +22,6 @@ before_script:
 
 script:
   - python -m pytest -v
+  - coverage run test_ddcrawler.py
+
+after_success: coveralls
