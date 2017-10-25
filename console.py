@@ -13,8 +13,11 @@ class Console:
         self.__input__ = input
         self.menu_formatter = self.default_menu_formatter
 
-    def print(self, *objects, sep=' ', end='\n', flush=True):
-        self.__print__(*objects, sep=sep, end=end, flush=flush)
+    def print(self, *objects, **kwargs):
+        for k, v in dict(sep=' ', end='\n', flush=True).items():
+            if k not in kwargs:
+                kwargs[k] = v
+        self.__print__(*objects, **kwargs)
 
     def getch(self, prompt='', echo=False, end='\n'):
         return self.__getch__(prompt, echo, end)
