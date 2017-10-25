@@ -1,4 +1,5 @@
-import dice
+# dice module need for loading presets
+import dice # NOQA
 
 import helper
 presets = helper.import_presets(__file__)
