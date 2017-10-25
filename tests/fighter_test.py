@@ -3,7 +3,7 @@ import unittest
 from ddt import ddt, data
 
 sys.path.insert(0, '../ddcrawler')
-import fighter # NOQA
+import fighter
 
 
 @ddt

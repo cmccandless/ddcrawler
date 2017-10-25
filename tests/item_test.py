@@ -2,7 +2,7 @@ import sys
 import unittest
 
 sys.path.insert(0, '../ddcrawler')
-from item import Item # NOQA
+from item import Item
 
 
 class ItemTest(unittest.TestCase):
