@@ -6,7 +6,7 @@ from ddt import ddt, data, unpack
 from testutils import AnnotatedList
 
 sys.path.insert(0, '../ddcrawler')
-import dice
+import dice # NOQA
 
 
 @ddt
