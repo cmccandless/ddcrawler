@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from getch import getch
 from math import floor, ceil
 
