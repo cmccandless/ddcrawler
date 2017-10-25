@@ -1,9 +1,8 @@
-from dice import (D4)
+import dice
 from item import Item
 
-with open('weapon.json', 'r') as f:
-    from json import load
-    presets = load(f)
+import helper
+presets = helper.import_presets(__file__)
 
 
 class Weapon(Item):
@@ -42,4 +41,4 @@ class Weapon(Item):
         return '{}({})'.format(self.name, dmgStr)
 
 
-unarmed = Weapon([D4], 'unarmed')
+unarmed = Weapon([dice.D4], 'unarmed')

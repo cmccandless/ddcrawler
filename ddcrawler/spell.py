@@ -1,6 +1,7 @@
-with open('spell.json', 'r') as f:
-    from json import load
-    presets = load(f)
+import dice
+
+import helper
+presets = helper.import_presets(__file__)
 
 
 class Spell:

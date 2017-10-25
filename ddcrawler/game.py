@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from player import (Player, BASE_XP_NEEDED)
 from encounter import Encounter
 from event import (eventhandler, InfoEvent)
@@ -19,7 +20,7 @@ class Game:
         from spell import Spell
         self.player.spells['Fireball'] = Spell.preset(self, 'Fireball')
 
-    def enable_console(enable=True):
+    def enable_console(self, enable=True):
         eventhandler.enable_console = enable
 
     def play(self):

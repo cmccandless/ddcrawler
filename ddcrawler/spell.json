@@ -1,0 +1,6 @@
+{
+	"Fireball": {
+		"ntargets": 1,
+		"damageDice": "[dice.D8, dice.D8]"
+	}
+}

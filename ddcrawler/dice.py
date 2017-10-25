@@ -1,7 +1,11 @@
 from random import randint
+import re
+
+pattern = re.compile('(D\d+)')
 
 
 class Dice:
+
     def __init__(self, sides):
         if isinstance(sides, list):
             self.__name__ = 'D[{}]'.format(','.join(map(str, sides)))

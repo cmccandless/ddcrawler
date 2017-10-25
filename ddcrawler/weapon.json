@@ -1,0 +1,14 @@
+{
+	"Sword": {
+		"damageDice": "[dice.D4, dice.D4]",
+		"value": 10
+	},
+	"Rusty Sword": {
+		"damageDice": "[dice.D4, dice.D4]",
+		"value": 0
+	},
+	"Axe": {
+		"damageDice": "[dice.D10]",
+		"value": 12
+	}
+}

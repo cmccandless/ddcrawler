@@ -5,9 +5,8 @@ from spell import MeleeBasic
 from event import (eventhandler,
                    AttackEvent)
 
-with open('fighter.json', 'r') as f:
-    from json import load
-    presets = load(f)
+import helper
+presets = helper.import_presets(__file__)
 
 
 class Fighter:

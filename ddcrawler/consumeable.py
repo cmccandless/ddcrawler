@@ -2,9 +2,8 @@ from item import Item
 from event import (eventhandler, DamageEvent, HealEvent, InfoEvent)
 from fighter import Fighter
 
-with open('consumeable.json', 'r') as f:
-    from json import load
-    presets = load(f)
+import helper
+presets = helper.import_presets(__file__)
 
 
 class Consumeable(Item):
